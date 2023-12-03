@@ -1,0 +1,85 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" style="color:white;">Portfolio</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a *ngIf="isAdmin" class="navbar-brand" style="color: white;" [routerLink]="['/employee']">Employees</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" style="color: white;" [routerLink]="['/share']">Shares</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" style="color: white;" [routerLink]="['/transaction']">Transactions</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+    aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-between" id="navbarColor02">
+    <ul class="navbar-nav ml-auto">
+    </ul>
+    <div>
+      <app-search [placeholder]="customPlaceholder" (searchTextChanged)="onSearchTextEntered($event)">
+      </app-search>
+    </div>
+    <button class="btn btn-outline-light my-2 my-sm-0" (click)="logout()">Logout</button>
+  </div>
+</nav>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>
+
+<ng-container>
+  <div class="container-fluid" id="main-container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card-body">
+          <h5 class="card-title text-uppercase mb-2">Portfolio</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table no-wrap user-table mb-0">
+            <thead>
+              <tr>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">#</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Symbol</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Share Name</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Balance</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Currency</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Current Price</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Book Value</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Current Market Value</th>
+                <th scope="col" class="border-0 text-uppercase font-medium text-center">Total Return (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let shareBalance of filteredShareBalances; let i = index">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center">{{ shareBalance.symbol }}</td>
+                <td class="text-center">{{ shareBalance.shareName }}</td>
+                <td class="text-center">{{ shareBalance.balance|number:'1.0-0' }}</td>
+                <td class="text-center">{{ shareBalance.currency }}</td>
+                <td class="text-center">{{ shareBalance.currentPrice |number:'1.2-2'}}</td>
+                <td class="text-center">{{ getBookValue(shareBalance)|number:'1.0-0' }}</td>
+                <td class="text-center">{{ getCurrentMarketValue(shareBalance)|number:'1.0-2' }}</td>
+                <td class="text-center"
+                  [ngClass]="{'text-danger': getTotalReturnPercentage(shareBalance) < 0, 'text-success': getTotalReturnPercentage(shareBalance) >= 0}">
+                  {{ formatPositiveNumber(getTotalReturnPercentage(shareBalance)) }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #showLoginMessage>
+
+</ng-template>
